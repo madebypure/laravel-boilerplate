@@ -18,8 +18,8 @@ trait InstallsSpladeStack
      *
      * @return void
      */
-    protected function installSpladeStack()
-    {
+    protected function installSpladeStack() {
+
         // Check Laravel version...
         if (version_compare(app()->version(), '10.0', '<')) {
             $this->error('While you can still use Splade with Laravel 9, new projects should use Laravel 10.');
@@ -32,6 +32,7 @@ trait InstallsSpladeStack
 
         // NPM Packages...
         $this->updateNodePackages(function ($packages) {
+
             return [
                 '@protonemedia/laravel-splade' => '^1.4.16',
                 '@tailwindcss/forms' => '^0.5.7',
@@ -44,6 +45,7 @@ trait InstallsSpladeStack
                 'vite' => '^5.0',
                 'vue' => '^3.4',
             ] + $packages;
+
         });
 
         // Add SSR build step...
@@ -104,6 +106,7 @@ trait InstallsSpladeStack
 
         $this->line('');
         $this->components->info('Breeze scaffolding installed successfully.');
+
     }
 
     /**
@@ -111,11 +114,12 @@ trait InstallsSpladeStack
      *
      * @return void
      */
-    protected function removeDarkClasses(Finder $finder)
-    {
+    protected function removeDarkClasses(Finder $finder) {
+
         foreach ($finder as $file) {
             file_put_contents($file->getPathname(), preg_replace('/\sdark:[^\s"\']+/', '', $file->getContents()));
         }
+
     }
 
     /**
@@ -123,8 +127,8 @@ trait InstallsSpladeStack
      *
      * @return void
      */
-    protected function updateNodeScript()
-    {
+    protected function updateNodeScript() {
+
         if (! file_exists(base_path('package.json'))) {
             return;
         }
@@ -135,5 +139,6 @@ trait InstallsSpladeStack
             base_path('package.json'),
             str_replace('"vite build"', '"vite build && vite build --ssr"', $packageFile)
         );
+
     }
 }

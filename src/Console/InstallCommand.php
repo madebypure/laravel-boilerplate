@@ -12,49 +12,31 @@ use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
 {
-    use InstallsApiStack, InstallsBladeStack, InstallsInertiaStacks, InstallsSpladeStack;
+    use InstallsSpladeStack;
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'breeze:install {stack=splade : The development stack that should be installed (blade,react,vue,api,splade)}
-                            {--dark : Indicate that dark mode support should be installed}
-                            {--inertia : Indicate that the Vue Inertia stack should be installed (Deprecated)}
-                            {--pest : Indicate that Pest should be installed}
-                            {--ssr : Indicates if Inertia SSR support should be installed}
-                            {--composer=global : Absolute path to the Composer binary which should be used to install packages}';
+    protected $signature = 'breeze:install';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Install the Breeze controllers and resources';
+    protected $description = 'Install the Breeze controllers and resources as well as Splade';
 
     /**
      * Execute the console command.
      *
      * @return int|null
      */
-    public function handle()
-    {
-        if ($this->option('inertia') || $this->argument('stack') === 'vue') {
-            return $this->installInertiaVueStack();
-        } elseif ($this->argument('stack') === 'react') {
-            return $this->installInertiaReactStack();
-        } elseif ($this->argument('stack') === 'api') {
-            return $this->installApiStack();
-        } elseif ($this->argument('stack') === 'blade') {
-            return $this->installBladeStack();
-        } elseif ($this->argument('stack') === 'splade') {
-            return $this->installSpladeStack();
-        }
+    public function handle() {
 
-        $this->components->error('Invalid stack. Supported stacks are [blade], [react], [vue], [api], and [splade].');
+        return $this->installSpladeStack();
 
-        return 1;
     }
 
     /**
@@ -62,8 +44,8 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    protected function installTests()
-    {
+    protected function installTests() {
+
         (new Filesystem)->ensureDirectoryExists(base_path('tests/Feature'));
 
         $stubStack = $this->argument('stack') === 'api' ? 'api' : 'default';
@@ -91,6 +73,7 @@ class InstallCommand extends Command
         } elseif (! $spladeStack) {
             (new Filesystem)->copyDirectory(__DIR__.'/../../stubs/'.$stubStack.'/tests/Feature', base_path('tests/Feature'));
         }
+
     }
 
     /**
@@ -98,8 +81,8 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    protected function installDusk()
-    {
+    protected function installDusk() {
+
         $this->requireComposerPackages(['laravel/dusk', 'protonemedia/laravel-dusk-fakes'], true);
 
         (new Process([$this->phpBinary(), 'artisan', 'dusk:install'], base_path()))
@@ -107,6 +90,7 @@ class InstallCommand extends Command
             ->run(function ($type, $output) {
                 $this->output->write($output);
             });
+
     }
 
     /**
@@ -117,8 +101,8 @@ class InstallCommand extends Command
      * @param  string  $group
      * @return void
      */
-    protected function installMiddlewareAfter($after, $name, $group = 'web')
-    {
+    protected function installMiddlewareAfter($after, $name, $group = 'web') {
+
         $httpKernel = file_get_contents(app_path('Http/Kernel.php'));
 
         $middlewareGroups = Str::before(Str::after($httpKernel, '$middlewareGroups = ['), '];');
@@ -137,6 +121,7 @@ class InstallCommand extends Command
                 $httpKernel
             ));
         }
+
     }
 
     /**
@@ -146,8 +131,8 @@ class InstallCommand extends Command
      * @param  bool  $dev
      * @return void
      */
-    protected function requireComposerPackages($packages, $dev = false)
-    {
+    protected function requireComposerPackages($packages, $dev = false) {
+
         $composer = $this->option('composer');
 
         if ($composer !== 'global') {
@@ -165,6 +150,7 @@ class InstallCommand extends Command
             ->run(function ($type, $output) {
                 $this->output->write($output);
             });
+
     }
 
     /**
@@ -173,8 +159,8 @@ class InstallCommand extends Command
      * @param  bool  $dev
      * @return void
      */
-    protected static function updateNodePackages(callable $callback, $dev = true)
-    {
+    protected static function updateNodePackages(callable $callback, $dev = true) {
+
         if (! file_exists(base_path('package.json'))) {
             return;
         }
@@ -194,6 +180,7 @@ class InstallCommand extends Command
             base_path('package.json'),
             json_encode($packages, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT).PHP_EOL
         );
+
     }
 
     /**
@@ -201,14 +188,15 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    protected static function flushNodeModules()
-    {
+    protected static function flushNodeModules() {
+
         tap(new Filesystem, function ($files) {
             $files->deleteDirectory(base_path('node_modules'));
 
             $files->delete(base_path('yarn.lock'));
             $files->delete(base_path('package-lock.json'));
         });
+
     }
 
     /**
@@ -219,9 +207,10 @@ class InstallCommand extends Command
      * @param  string  $path
      * @return void
      */
-    protected function replaceInFile($search, $replace, $path)
-    {
+    protected function replaceInFile($search, $replace, $path) {
+
         file_put_contents($path, str_replace($search, $replace, file_get_contents($path)));
+
     }
 
     /**
@@ -229,9 +218,10 @@ class InstallCommand extends Command
      *
      * @return string
      */
-    protected function phpBinary()
-    {
+    protected function phpBinary() {
+
         return (new PhpExecutableFinder())->find(false) ?: 'php';
+
     }
 
     /**
@@ -240,8 +230,8 @@ class InstallCommand extends Command
      * @param  array  $commands
      * @return void
      */
-    protected function runCommands($commands)
-    {
+    protected function runCommands($commands) {
+
         $process = Process::fromShellCommandline(implode(' && ', $commands), null, null, null, null);
 
         if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
@@ -255,6 +245,7 @@ class InstallCommand extends Command
         $process->run(function ($type, $line) {
             $this->output->write('    '.$line);
         });
+
     }
 
     /**
@@ -262,10 +253,11 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    protected function removeDarkClasses(Finder $finder)
-    {
+    protected function removeDarkClasses(Finder $finder) {
+
         foreach ($finder as $file) {
             file_put_contents($file->getPathname(), preg_replace('/\sdark:[^\s"\']+/', '', $file->getContents()));
         }
+
     }
 }

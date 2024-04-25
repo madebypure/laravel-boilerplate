@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('splade')->group(function () {
+
     // Registers routes to support the interactive components...
     Route::spladeWithVueBridge();
 
@@ -27,19 +28,8 @@ Route::middleware('splade')->group(function () {
     // Registers routes to support async File Uploads with Filepond...
     Route::spladeUploads();
 
-    Route::get('/', function () {
-        return view('welcome');
-    });
+    Route::view('/', 'welcome')->name('home');
 
-    Route::middleware('auth')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('dashboard');
-        })->middleware(['verified'])->name('dashboard');
+    require __DIR__ . '/auth.php';
 
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    });
-
-    require __DIR__.'/auth.php';
 });

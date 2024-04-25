@@ -17,9 +17,10 @@ class NewPasswordController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function create(Request $request)
-    {
+    public function create(Request $request) {
+
         return view('auth.reset-password', ['request' => $request]);
+
     }
 
     /**
@@ -29,12 +30,14 @@ class NewPasswordController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
+
         $request->validate([
-            'token' => ['required'],
-            'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+
+            'token'     =>  ['required'],
+            'email'     =>  ['required', 'email'],
+            'password'  =>  ['required', 'confirmed', Rules\Password::defaults()],
+
         ]);
 
         // Here we will attempt to reset the user's password. If it is successful we
@@ -59,5 +62,6 @@ class NewPasswordController extends Controller
                     ? redirect()->route('login')->with('status', __($status))
                     : back()->withInput($request->only('email'))
                         ->withErrors(['email' => __($status)]);
+
     }
 }
