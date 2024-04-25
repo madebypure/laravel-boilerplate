@@ -17,7 +17,8 @@ class RegisterController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function create() {
+    public function create()
+    {
 
         return view('auth.register');
 
@@ -30,13 +31,14 @@ class RegisterController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
 
         $request->validate([
 
-            'name'      =>  ['required', 'string', 'max:255'],
-            'email'     =>  ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
-            'password'  =>  ['required', 'confirmed', Rules\Password::defaults()]
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
 
         ]);
 
@@ -44,7 +46,7 @@ class RegisterController extends Controller
 
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
 
         ]);
 

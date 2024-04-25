@@ -13,7 +13,8 @@ class VerifyEmailController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function __invoke(EmailVerificationRequest $request) {
+    public function __invoke(EmailVerificationRequest $request)
+    {
 
         if ($request->user()->hasVerifiedEmail()) {
             return redirect()->intended('/?verified=1');
@@ -32,7 +33,8 @@ class VerifyEmailController extends Controller
      *
      * @return mixed
      */
-    public function prompt(Request $request) {
+    public function prompt(Request $request)
+    {
 
         return $request->user()->hasVerifiedEmail() ? redirect()->intended('/') : view('auth.verify-email');
 
@@ -43,7 +45,8 @@ class VerifyEmailController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function send(Request $request) {
+    public function send(Request $request)
+    {
 
         if ($request->user()->hasVerifiedEmail()) {
             return redirect()->intended('/');

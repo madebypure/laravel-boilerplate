@@ -33,7 +33,8 @@ class InstallCommand extends Command
      *
      * @return int|null
      */
-    public function handle() {
+    public function handle()
+    {
 
         return $this->installSpladeStack();
 
@@ -44,7 +45,8 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    protected function installTests() {
+    protected function installTests()
+    {
 
         (new Filesystem)->ensureDirectoryExists(base_path('tests/Feature'));
 
@@ -81,7 +83,8 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    protected function installDusk() {
+    protected function installDusk()
+    {
 
         $this->requireComposerPackages(['laravel/dusk', 'protonemedia/laravel-dusk-fakes'], true);
 
@@ -101,7 +104,8 @@ class InstallCommand extends Command
      * @param  string  $group
      * @return void
      */
-    protected function installMiddlewareAfter($after, $name, $group = 'web') {
+    protected function installMiddlewareAfter($after, $name, $group = 'web')
+    {
 
         $httpKernel = file_get_contents(app_path('Http/Kernel.php'));
 
@@ -131,7 +135,8 @@ class InstallCommand extends Command
      * @param  bool  $dev
      * @return void
      */
-    protected function requireComposerPackages($packages, $dev = false) {
+    protected function requireComposerPackages($packages, $dev = false)
+    {
 
         $composer = $this->option('composer');
 
@@ -159,7 +164,8 @@ class InstallCommand extends Command
      * @param  bool  $dev
      * @return void
      */
-    protected static function updateNodePackages(callable $callback, $dev = true) {
+    protected static function updateNodePackages(callable $callback, $dev = true)
+    {
 
         if (! file_exists(base_path('package.json'))) {
             return;
@@ -188,7 +194,8 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    protected static function flushNodeModules() {
+    protected static function flushNodeModules()
+    {
 
         tap(new Filesystem, function ($files) {
             $files->deleteDirectory(base_path('node_modules'));
@@ -207,7 +214,8 @@ class InstallCommand extends Command
      * @param  string  $path
      * @return void
      */
-    protected function replaceInFile($search, $replace, $path) {
+    protected function replaceInFile($search, $replace, $path)
+    {
 
         file_put_contents($path, str_replace($search, $replace, file_get_contents($path)));
 
@@ -218,7 +226,8 @@ class InstallCommand extends Command
      *
      * @return string
      */
-    protected function phpBinary() {
+    protected function phpBinary()
+    {
 
         return (new PhpExecutableFinder())->find(false) ?: 'php';
 
@@ -230,7 +239,8 @@ class InstallCommand extends Command
      * @param  array  $commands
      * @return void
      */
-    protected function runCommands($commands) {
+    protected function runCommands($commands)
+    {
 
         $process = Process::fromShellCommandline(implode(' && ', $commands), null, null, null, null);
 
@@ -253,7 +263,8 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    protected function removeDarkClasses(Finder $finder) {
+    protected function removeDarkClasses(Finder $finder)
+    {
 
         foreach ($finder as $file) {
             file_put_contents($file->getPathname(), preg_replace('/\sdark:[^\s"\']+/', '', $file->getContents()));

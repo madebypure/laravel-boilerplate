@@ -18,7 +18,8 @@ trait InstallsSpladeStack
      *
      * @return void
      */
-    protected function installSpladeStack() {
+    protected function installSpladeStack()
+    {
 
         // Check Laravel version...
         if (version_compare(app()->version(), '10.0', '<')) {
@@ -114,7 +115,8 @@ trait InstallsSpladeStack
      *
      * @return void
      */
-    protected function removeDarkClasses(Finder $finder) {
+    protected function removeDarkClasses(Finder $finder)
+    {
 
         foreach ($finder as $file) {
             file_put_contents($file->getPathname(), preg_replace('/\sdark:[^\s"\']+/', '', $file->getContents()));
@@ -127,7 +129,8 @@ trait InstallsSpladeStack
      *
      * @return void
      */
-    protected function updateNodeScript() {
+    protected function updateNodeScript()
+    {
 
         if (! file_exists(base_path('package.json'))) {
             return;

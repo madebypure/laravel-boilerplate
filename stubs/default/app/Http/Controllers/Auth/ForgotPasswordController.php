@@ -13,7 +13,8 @@ class ForgotPasswordController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function create() {
+    public function create()
+    {
 
         return view('auth.forgot-password');
 
@@ -26,10 +27,11 @@ class ForgotPasswordController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
 
         $request->validate([
-            'email' => 'required|email'
+            'email' => 'required|email',
         ]);
 
         // We will send the password reset link to this user. Once we have attempted

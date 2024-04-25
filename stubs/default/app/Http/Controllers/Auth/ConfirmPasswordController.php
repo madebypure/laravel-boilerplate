@@ -14,7 +14,8 @@ class ConfirmPasswordController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function show() {
+    public function show()
+    {
 
         return view('auth.confirm-password');
 
@@ -25,9 +26,10 @@ class ConfirmPasswordController extends Controller
      *
      * @return mixed
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
 
-        if (!Auth::guard('web')->validate([
+        if (! Auth::guard('web')->validate([
             'email' => $request->user()->email,
             'password' => $request->password,
         ])) {
