@@ -13,8 +13,7 @@ class ForgotPasswordController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function create()
-    {
+    public function create() {
 
         return view('auth.forgot-password');
 
@@ -27,8 +26,7 @@ class ForgotPasswordController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
 
         $request->validate([
             'email' => 'required|email',
@@ -39,10 +37,7 @@ class ForgotPasswordController extends Controller
         // need to show to the user. Finally, we'll send out a proper response.
         $status = Password::sendResetLink($request->only('email'));
 
-        return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
-                    : back()->withInput($request->only('email'))
-                        ->withErrors(['email' => __($status)]);
+        return $status == Password::RESET_LINK_SENT ? back()->with('status', __($status)) : back()->withInput($request->only('email'))->withErrors(['email' => __($status)]);
 
     }
 }

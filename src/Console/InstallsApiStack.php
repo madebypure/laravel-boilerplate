@@ -11,8 +11,8 @@ trait InstallsApiStack
      *
      * @return void
      */
-    protected function installApiStack()
-    {
+    protected function installApiStack() {
+
         $files = new Filesystem;
 
         // Controllers...
@@ -71,6 +71,7 @@ trait InstallsApiStack
         $this->removeScaffoldingUnnecessaryForApis();
 
         $this->components->info('Breeze scaffolding installed successfully.');
+
     }
 
     /**
@@ -78,8 +79,8 @@ trait InstallsApiStack
      *
      * @return void
      */
-    protected function removeScaffoldingUnnecessaryForApis()
-    {
+    protected function removeScaffoldingUnnecessaryForApis() {
+
         $files = new Filesystem;
 
         // Remove frontend related files...
@@ -87,11 +88,12 @@ trait InstallsApiStack
         $files->delete(base_path('vite.config.js'));
 
         // Remove Laravel "welcome" view...
-        $files->delete(resource_path('views/welcome.blade.php'));
+        $files->delete(resource_path('views/home.blade.php'));
         $files->put(resource_path('views/.gitkeep'), PHP_EOL);
 
         // Remove CSS and JavaScript directories...
         $files->deleteDirectory(resource_path('css'));
         $files->deleteDirectory(resource_path('js'));
+
     }
 }

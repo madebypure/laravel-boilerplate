@@ -13,8 +13,8 @@ trait InstallsInertiaStacks
      *
      * @return void
      */
-    protected function installInertiaVueStack()
-    {
+    protected function installInertiaVueStack() {
+
         // Install Inertia...
         $this->requireComposerPackages(['inertiajs/inertia-laravel:^0.6.3', 'laravel/sanctum:^2.8', 'tightenco/ziggy:^1.0']);
 
@@ -102,6 +102,7 @@ trait InstallsInertiaStacks
 
         $this->line('');
         $this->components->info('Breeze scaffolding installed successfully.');
+
     }
 
     /**
@@ -109,8 +110,8 @@ trait InstallsInertiaStacks
      *
      * @return void
      */
-    protected function installInertiaVueSsrStack()
-    {
+    protected function installInertiaVueSsrStack() {
+
         $this->updateNodePackages(function ($packages) {
             return [
                 '@inertiajs/server' => '^0.1.0',
@@ -235,6 +236,7 @@ trait InstallsInertiaStacks
 
         $this->line('');
         $this->components->info('Breeze scaffolding installed successfully.');
+
     }
 
     /**
@@ -242,8 +244,8 @@ trait InstallsInertiaStacks
      *
      * @return void
      */
-    protected function installInertiaReactSsrStack()
-    {
+    protected function installInertiaReactSsrStack() {
+
         $this->updateNodePackages(function ($packages) {
             return [
                 '@inertiajs/server' => '^0.1.0',
@@ -263,5 +265,6 @@ trait InstallsInertiaStacks
         $this->replaceInFile("'enabled' => false", "'enabled' => true", config_path('inertia.php'));
         $this->replaceInFile('vite build', 'vite build && vite build --ssr', base_path('package.json'));
         $this->replaceInFile('/node_modules', '/bootstrap/ssr'.PHP_EOL.'/node_modules', base_path('.gitignore'));
+
     }
 }

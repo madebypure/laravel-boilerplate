@@ -14,8 +14,7 @@ class LoginController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function create()
-    {
+    public function create() {
 
         return view('auth.login');
 
@@ -26,8 +25,7 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(LoginRequest $request)
-    {
+    public function store(LoginRequest $request) {
 
         $request->authenticate();
 
@@ -42,8 +40,7 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Request $request)
-    {
+    public function destroy(Request $request) {
 
         Auth::guard('web')->logout();
 

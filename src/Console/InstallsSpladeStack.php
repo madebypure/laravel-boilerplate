@@ -18,14 +18,15 @@ trait InstallsSpladeStack
      *
      * @return void
      */
-    protected function installSpladeStack()
-    {
+    protected function installSpladeStack() {
 
         // Check Laravel version...
         if (version_compare(app()->version(), '10.0', '<')) {
+
             $this->error('While you can still use Splade with Laravel 9, new projects should use Laravel 10.');
 
             return Command::FAILURE;
+
         }
 
         $this->installExceptionHandler();
@@ -76,7 +77,7 @@ trait InstallsSpladeStack
 
         copy($spladeBreezeStubsDir.'resources/views/dashboard.blade.php', resource_path('views/dashboard.blade.php'));
         copy($spladeBreezeStubsDir.'resources/views/root.blade.php', resource_path('views/root.blade.php'));
-        copy($spladeBreezeStubsDir.'resources/views/welcome.blade.php', resource_path('views/welcome.blade.php'));
+        copy($spladeBreezeStubsDir.'resources/views/home.blade.php', resource_path('views/home.blade.php'));
 
         // Components...
         (new Filesystem)->ensureDirectoryExists(app_path('View/Components'));
@@ -115,8 +116,7 @@ trait InstallsSpladeStack
      *
      * @return void
      */
-    protected function removeDarkClasses(Finder $finder)
-    {
+    protected function removeDarkClasses(Finder $finder) {
 
         foreach ($finder as $file) {
             file_put_contents($file->getPathname(), preg_replace('/\sdark:[^\s"\']+/', '', $file->getContents()));
@@ -129,8 +129,7 @@ trait InstallsSpladeStack
      *
      * @return void
      */
-    protected function updateNodeScript()
-    {
+    protected function updateNodeScript() {
 
         if (! file_exists(base_path('package.json'))) {
             return;

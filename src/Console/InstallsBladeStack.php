@@ -12,8 +12,8 @@ trait InstallsBladeStack
      *
      * @return void
      */
-    protected function installBladeStack()
-    {
+    protected function installBladeStack() {
+
         // NPM Packages...
         $this->updateNodePackages(function ($packages) {
             return [
@@ -41,7 +41,7 @@ trait InstallsBladeStack
             $this->removeDarkClasses((new Finder)
                 ->in(resource_path('views'))
                 ->name('*.blade.php')
-                ->notName('welcome.blade.php')
+                ->notName('home.blade.php')
             );
         }
 
@@ -57,8 +57,8 @@ trait InstallsBladeStack
         copy(__DIR__.'/../../stubs/default/routes/auth.php', base_path('routes/auth.php'));
 
         // "Dashboard" Route...
-        $this->replaceInFile('/home', '/dashboard', resource_path('views/welcome.blade.php'));
-        $this->replaceInFile('Home', 'Dashboard', resource_path('views/welcome.blade.php'));
+        $this->replaceInFile('/home', '/dashboard', resource_path('views/home.blade.php'));
+        $this->replaceInFile('Home', 'Dashboard', resource_path('views/home.blade.php'));
         $this->replaceInFile('/home', '/dashboard', app_path('Providers/RouteServiceProvider.php'));
 
         // Tailwind / Vite...
@@ -78,5 +78,6 @@ trait InstallsBladeStack
 
         $this->line('');
         $this->components->info('Breeze scaffolding installed successfully.');
+
     }
 }

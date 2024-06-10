@@ -33,8 +33,7 @@ class InstallCommand extends Command
      *
      * @return int|null
      */
-    public function handle()
-    {
+    public function handle() {
 
         return $this->installSpladeStack();
 
@@ -45,8 +44,7 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    protected function installTests()
-    {
+    protected function installTests() {
 
         (new Filesystem)->ensureDirectoryExists(base_path('tests/Feature'));
 
@@ -55,14 +53,17 @@ class InstallCommand extends Command
         $spladeStack = $this->argument('stack') === 'splade';
 
         if ($spladeStack) {
+
             $this->installDusk();
             (new Filesystem)->ensureDirectoryExists(base_path('tests/Browser'));
             (new Filesystem)->copyDirectory(__DIR__.'/../../stubs/splade/dusk-tests', base_path('tests/Browser'));
             (new Filesystem)->copy(__DIR__.'/../../stubs/splade/dusk-tests/.env.dusk', base_path('.env.dusk'));
             (new Filesystem)->put(base_path('database/database.sqlite'), '');
+
         }
 
         if ($this->option('pest')) {
+
             $this->requireComposerPackages(['pestphp/pest:^1.16', 'pestphp/pest-plugin-laravel:^1.1']);
 
             if (! $spladeStack) {
@@ -72,6 +73,7 @@ class InstallCommand extends Command
             (new Filesystem)->copyDirectory(__DIR__.'/../../stubs/'.$stubStack.'/pest-tests/Feature', base_path('tests/Feature'));
             (new Filesystem)->copyDirectory(__DIR__.'/../../stubs/'.$stubStack.'/pest-tests/Unit', base_path('tests/Unit'));
             (new Filesystem)->copy(__DIR__.'/../../stubs/'.$stubStack.'/pest-tests/Pest.php', base_path('tests/Pest.php'));
+
         } elseif (! $spladeStack) {
             (new Filesystem)->copyDirectory(__DIR__.'/../../stubs/'.$stubStack.'/tests/Feature', base_path('tests/Feature'));
         }
@@ -83,8 +85,7 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    protected function installDusk()
-    {
+    protected function installDusk() {
 
         $this->requireComposerPackages(['laravel/dusk', 'protonemedia/laravel-dusk-fakes'], true);
 
@@ -104,8 +105,7 @@ class InstallCommand extends Command
      * @param  string  $group
      * @return void
      */
-    protected function installMiddlewareAfter($after, $name, $group = 'web')
-    {
+    protected function installMiddlewareAfter($after, $name, $group = 'web') {
 
         $httpKernel = file_get_contents(app_path('Http/Kernel.php'));
 
@@ -113,6 +113,7 @@ class InstallCommand extends Command
         $middlewareGroup = Str::before(Str::after($middlewareGroups, "'$group' => ["), '],');
 
         if (! Str::contains($middlewareGroup, $name)) {
+
             $modifiedMiddlewareGroup = str_replace(
                 $after.',',
                 $after.','.PHP_EOL.'            '.$name.',',
@@ -124,6 +125,7 @@ class InstallCommand extends Command
                 str_replace($middlewareGroup, $modifiedMiddlewareGroup, $middlewareGroups),
                 $httpKernel
             ));
+
         }
 
     }
@@ -135,8 +137,7 @@ class InstallCommand extends Command
      * @param  bool  $dev
      * @return void
      */
-    protected function requireComposerPackages($packages, $dev = false)
-    {
+    protected function requireComposerPackages($packages, $dev = false) {
 
         $composer = $this->option('composer');
 
@@ -164,8 +165,7 @@ class InstallCommand extends Command
      * @param  bool  $dev
      * @return void
      */
-    protected static function updateNodePackages(callable $callback, $dev = true)
-    {
+    protected static function updateNodePackages(callable $callback, $dev = true) {
 
         if (! file_exists(base_path('package.json'))) {
             return;
@@ -194,14 +194,15 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    protected static function flushNodeModules()
-    {
+    protected static function flushNodeModules() {
 
         tap(new Filesystem, function ($files) {
+
             $files->deleteDirectory(base_path('node_modules'));
 
             $files->delete(base_path('yarn.lock'));
             $files->delete(base_path('package-lock.json'));
+
         });
 
     }
@@ -214,8 +215,7 @@ class InstallCommand extends Command
      * @param  string  $path
      * @return void
      */
-    protected function replaceInFile($search, $replace, $path)
-    {
+    protected function replaceInFile($search, $replace, $path) {
 
         file_put_contents($path, str_replace($search, $replace, file_get_contents($path)));
 
@@ -226,8 +226,7 @@ class InstallCommand extends Command
      *
      * @return string
      */
-    protected function phpBinary()
-    {
+    protected function phpBinary() {
 
         return (new PhpExecutableFinder())->find(false) ?: 'php';
 
@@ -239,17 +238,18 @@ class InstallCommand extends Command
      * @param  array  $commands
      * @return void
      */
-    protected function runCommands($commands)
-    {
+    protected function runCommands($commands) {
 
         $process = Process::fromShellCommandline(implode(' && ', $commands), null, null, null, null);
 
         if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
+
             try {
                 $process->setTty(true);
             } catch (RuntimeException $e) {
                 $this->output->writeln('  <bg=yellow;fg=black> WARN </> '.$e->getMessage().PHP_EOL);
             }
+
         }
 
         $process->run(function ($type, $line) {
@@ -263,8 +263,7 @@ class InstallCommand extends Command
      *
      * @return void
      */
-    protected function removeDarkClasses(Finder $finder)
-    {
+    protected function removeDarkClasses(Finder $finder) {
 
         foreach ($finder as $file) {
             file_put_contents($file->getPathname(), preg_replace('/\sdark:[^\s"\']+/', '', $file->getContents()));
