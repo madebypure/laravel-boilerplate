@@ -13,7 +13,8 @@ trait InstallsInertiaStacks
      *
      * @return void
      */
-    protected function installInertiaVueStack() {
+    protected function installInertiaVueStack()
+    {
 
         // Install Inertia...
         $this->requireComposerPackages(['inertiajs/inertia-laravel:^0.6.3', 'laravel/sanctum:^2.8', 'tightenco/ziggy:^1.0']);
@@ -110,7 +111,8 @@ trait InstallsInertiaStacks
      *
      * @return void
      */
-    protected function installInertiaVueSsrStack() {
+    protected function installInertiaVueSsrStack()
+    {
 
         $this->updateNodePackages(function ($packages) {
             return [
@@ -244,7 +246,8 @@ trait InstallsInertiaStacks
      *
      * @return void
      */
-    protected function installInertiaReactSsrStack() {
+    protected function installInertiaReactSsrStack()
+    {
 
         $this->updateNodePackages(function ($packages) {
             return [

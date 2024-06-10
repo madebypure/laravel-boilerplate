@@ -11,7 +11,8 @@ trait InstallsApiStack
      *
      * @return void
      */
-    protected function installApiStack() {
+    protected function installApiStack()
+    {
 
         $files = new Filesystem;
 
@@ -79,7 +80,8 @@ trait InstallsApiStack
      *
      * @return void
      */
-    protected function removeScaffoldingUnnecessaryForApis() {
+    protected function removeScaffoldingUnnecessaryForApis()
+    {
 
         $files = new Filesystem;
 

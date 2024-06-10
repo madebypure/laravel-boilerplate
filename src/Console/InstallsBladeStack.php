@@ -12,7 +12,8 @@ trait InstallsBladeStack
      *
      * @return void
      */
-    protected function installBladeStack() {
+    protected function installBladeStack()
+    {
 
         // NPM Packages...
         $this->updateNodePackages(function ($packages) {
